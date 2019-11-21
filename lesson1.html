@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>VScode</title>
+  <script src="https://unpkg.com/vue"></script>
+</head>
+<body>
+  <div id="excercise">
+    <p>VueJS is pretty cool {{ name }} ({{ age }})</p>
+    <p>{{ age * 3 }}</p>
+    <p>{{ randomNumber()}}</p>
+    <div>
+        <img v-bind:src="imageLink">
+    </div>
+    <div>
+        <input v-bind:value="name" type="text">
+    </div>
+  </div>
+
+  <script>
+    var app = new Vue({
+      el: '#excercise',
+      data: {
+        name: 'rubyan',
+        age: 10,
+        imageLink: 'https://vuejs.org/images/logo.png'
+      },
+      methods: {
+        randomNumber: function() {
+            return Math.random();
+        }
+      }
+    })
+  </script>
+</body>
+</html>
