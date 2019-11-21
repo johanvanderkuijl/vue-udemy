@@ -11,6 +11,7 @@
     <p v-on:mousemove="updateCoordinates">Coordinates: {{ x }} / {{ y }}
       <span v-on:mousemove.stop>DEAD SPOT</span>
     </p>
+    <input type="text" v-bind:value="counter" v-on:keyup.enter="alertMe">
   </div>
 
   <script>
@@ -24,6 +25,7 @@
       methods: {
         increase: function(step) {
             this.counter = this.counter + step;
+            console.log("increased counter");
         },
         updateCoordinates: function(event) {
           this.x = event.clientX;
@@ -31,6 +33,10 @@
         },
         dummy: function(event) {
           event.stopPropagation();
+        },
+        alertMe: function(event) {
+          console.log('alert');
+          alert('hi');
         }
       }
     })
