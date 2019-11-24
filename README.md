@@ -83,4 +83,5 @@ Use v-bind:key or :key to have Vue update the complete item in the list
 
 excercise: https://jsfiddle.net/hx2gb8o0/  
 
+# project 1 monster slayer
 
