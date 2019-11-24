@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>VScode</title>
+  <script src="https://unpkg.com/vue"></script>
+  <style>
+      body {
+        background: #eee;
+      }
+      .block {
+        height: 50px;
+        width: 50px;
+        background-color: gray;
+        margin: 5px;
+        display: inline-block; 
+      }
+      .red {
+        background-color: red;
+      }
+      .blue {
+        background-color: blue;
+      }
+      .green {
+        background-color: green;
+      }
+    </style>
+</head>
+<body>
+  <div id="app">
+    <div class="block" :style="{backgroundColor: color}"></div>
+    <div class="block" :style="{'width': widthpx}"></div>
+    <div class="block" :style="[myStyle, {height: width + 'px'}]"></div>
+    <input type="text" v-model="color">
+    <input type="text" v-model="width">
+  </div>
+
+  <script>
+    var app = new Vue({
+      el: '#app',
+      data: {
+        color: "yellow",
+        width: 3,
+        widthpx: "3px",
+      },
+      computed: {
+        myStyle: function() {
+          return {width: this.width + 'px'}
+        }
+      }
+    })
+  </script>
+
+
+
+</body>
+</html>

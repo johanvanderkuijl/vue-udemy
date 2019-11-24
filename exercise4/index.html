@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ex 4</title>
+  <!-- <script src="https://npmcdn.com/vue/dist/vue.js"></script> -->
+  <script src="https://npmcdn.com/vue/dist/vue.js"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="exercise">
+  <!-- 1) Start the Effect with the Button. The Effect should 
+    alternate the "highlight" or "shrink" class on each new 
+    setInterval tick (attach respective class to the div 
+    with id "effect" below) -->
+  <div>
+    <button @click="startEffect">Start Effect</button>
+    <div id="effect" :class="effectClass">effect box</div>
+  </div>
+  <!-- 2) Create a couple of CSS classes and attach them 
+    via the array syntax -->
+  <div :class="['one', {two: true}]">I got two classes!</div>
+  <!-- 3) Let the user enter a class (create some example 
+    classes) and attach it -->
+  <div>
+    Userclass, options: one, two, shrink, highlight
+    <input v-model="userClass" type="text">
+    <div :class="userClass">I am the userclass div</div>
+  </div>
+  <!-- 4) Let the user enter a class and enter true/ false 
+    for another class (create some example classes) and 
+    attach the classes -->
+  <div>
+    class<input v-model="chooseClass" type="text">
+    bool<input v-model="chooseBoolean" type="text">
+    <div :class="{chooseClass: chooseBoolean}">attach class: {{ chooseClass }} with {{ chooseBoolean }}</div>
+  </div>
+
+  <!-- another try on 4 -->
+  <div>
+    <input v-model="myclass" type="text">
+    <input v-model="mybool" type="text">
+    <div :class="{ myclass: mybool }">attach class {{ myclass }} with {{ mybool }}</div>
+    <!-- and another try with a function -->
+    <div :class="calculateClass">attach class {{ myclass }} with {{ mybool }}</div>
+  </div>
+  <!-- note for above: I could not make it work this way  -->
+  <!-- the solution from max below -->
+  <div>
+    <p>solution max</p>
+    classname <input v-model="userClassMax" type="text">
+    boolean visible?<input v-model="isVisible" type="text">
+    <div v-bind:class="[{visible: isVisible}, userClassMax]">attach class with true</div>
+  </div>
+
+
+
+  <!-- 5) Repeat 3) but now with values for styles (instead of class names). 
+    Attach the respective styles.  -->
+  <div>
+    Enter background color:
+    <input v-model="myStyle" type="text">
+    <div v-bind:style="myStyleObject">This is {{ myStyle }}</div>
+  </div>
+  <!-- 6) Create a simple progress bar with 
+    setInterval and style bindings. Start it
+     by hitting the below button. -->
+  <div>
+    <button @click="startProgress">Start Progress</button>
+    <div class="progressbar" :style="progressStyle">{{ progress }}%</div>
+
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

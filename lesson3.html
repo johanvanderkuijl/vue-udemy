@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>VScode</title>
+  <script src="https://unpkg.com/vue"></script>
+</head>
+<body>
+  <div id="app">
+    <!-- v-model is 2-way binding -->
+    <input type="text" v-model="name">
+    {{ name }}
+
+    <button v-on:click="counter++">Increase</button>
+    <button v-on:click="counter--">Decrease</button>
+    <button v-on:click="secondCounter++">Increase Second</button>
+    <p>Counter: {{ counter }} | {{ secondCounter }}</p>
+    <p>Result: {{ output }}</p>
+  </div>
+
+  <script>
+    var app = new Vue({
+      el: '#app',
+      data: {
+        name: 'johan',
+        counter: 0,
+        secondCounter: 0,
+      },
+      // dependent properties
+      computed: {
+        output: function() {
+          return this.counter > 5 ? 'greater 5' : 'smaller 5';
+        }
+      },
+      // Execute upon data changes
+      watch: {
+        counter: function(event) {
+          console.log(event);
+          var vm = this;
+          setTimeout(function() {
+            vm.counter = 0;
+          }, 2000);
+        }
+      },
+      methods: {
+        increase: function(step) {
+            this.counter = this.counter + step;
+            console.log("increased counter");
+        },
+        
+      }
+    })
+  </script>
+</body>
+</html>

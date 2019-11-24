@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>VScode</title>
+  <script src="https://unpkg.com/vue"></script>
+  <style>
+      body {
+        background: #eee;
+      }
+      .block {
+        height: 50px;
+        width: 50px;
+        background-color: gray;
+        margin: 5px;
+        display: inline-block; 
+      }
+      .red {
+        background-color: red;
+      }
+      .blue {
+        background-color: blue;
+      }
+      .green {
+        background-color: green;
+      }
+    </style>
+</head>
+<body>
+  <div id="app">
+    <div @click="doRed" class="block" :class="{red: isRed}"></div>
+    <div @click="isBlue = !isBlue" class="block" :class="{blue: isBlue}"></div>
+    <div @click="isGreen = !isGreen" class="block" :class="greenClass"></div>
+    <div class="block" :class="[color, {red: isRed}]"></div>
+    <input type=text v-model="color">
+  </div>
+
+  <script>
+    var app = new Vue({
+      el: '#app',
+      data: {
+        isRed: false,
+        isBlue: false,
+        isGreen: false,
+        color: ""
+      },
+      computed: {
+        greenClass: function() {
+          return {green: this.isGreen};
+        }
+      },
+      methods: {
+        doRed: function() {
+          this.isRed = ! this.isRed;
+        }
+      }
+    })
+  </script>
+
+
+</body>
+</html>
