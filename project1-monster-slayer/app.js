@@ -1,8 +1,19 @@
+// es5 syntax
+function hello(name) {
+    return 'hello ' + name;
+}
+
+// es6 syntax
+const helloEs6 = name => {
+    return `hello ${name}`;
+}
+
 new Vue({
     el: '#app',
     data: {
         player: {
-            health: 100
+            health: 100,
+            derp: 1
         },
         monster: {
             health: 100
@@ -12,7 +23,11 @@ new Vue({
             log: []
         }
     },
+    created: function() {
+      console.log(hello('johan'));  
+      console.log(helloEs6('johan'));  
 
+    },
     computed: {
         progressBarPlayer: function() {
             return {
@@ -34,6 +49,7 @@ new Vue({
     methods: {
         start: function() {
             this.game.playing = true;
+            this.player.derp = 1;
             this.player.health = 100;
             this.monster.health = 100;
             
@@ -101,6 +117,8 @@ new Vue({
         },
 
         derp: function() {
+            this.player.derp = 0;
+
             // random do -50 for a player
             player_health_damage = 0;
             monster_health_damage = 0;

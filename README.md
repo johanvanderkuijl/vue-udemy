@@ -83,5 +83,67 @@ Use v-bind:key or :key to have Vue update the complete item in the list
 
 excercise: https://jsfiddle.net/hx2gb8o0/  
 
-# project 1 monster slayer
+## project 1 monster slayer
+see project1-monster-slayer
 
+## The vue js instance
+multiple instances:  
+    var vm1 = new Vue({ el: '#app2', data: {'title': 'yo'})
+    vm1.title = 'blah'
+but you cannot add new properties
+```
+vm1.$el is the html part of Vue
+vm1.$data is the data part of Vue, so you can also pass it
+$refs are named elements with special attribute ref:
+<button ref="yo" @click="clickButton">
+this.$refs.yo.innerText='nice';
+note that you change the dom, not the internal Vue template!
+vm1.$mount("#app") does the same as the el: "#app" property
+
+components: reusable objects
+Vue.component('divname', {template: '<h1>hello</h1>'});
+```
+## about the virtual dom
+vue updates the virtual dom quickly and then only updates the real dom with the diff
+```
+lifecycle methods (in the root Vue obj)
+beforeCreate 
+create
+beforeMount
+mounted
+beforeUpdate
+updated
+beforeDestroy
+destroyed
+```
+## development workflow
+you can compile an es6 js app into js5 code and serve it pre compiled. nodejs is the package manager and local server
+vscode plugin: vetur https://www.youtube.com/watch?v=05tNXJ-Kric  
+
+## vue cli
+the vue cli allows us to fetch project templates
+``` npm install -g vue-cli ```
+now you can choose templates:
+simple  
+webpack-simple (start here)  
+webpack
+browserify / browserify-simple  
+
+install vue-cli globally: ```sudo npm install -g vue-cli```
+create vue app: ```vue init webpack-simple myapp ```
+
+- babel will transpile es6 to es5 so you can run in any browser  
+- index.html serves the /dist/build.js file that was compiled
+the file is bundled as one file  
+- package.json is for dependencies  
+- main.js is executed first. Here is the Vue instance created  
+```
+new Vue({
+  el: '#app',
+  render: h => h(App) // es6 function that renders a vue template
+})
+```
+The single file App.vue structure always has:  
+- template
+- script
+- style (optional)
