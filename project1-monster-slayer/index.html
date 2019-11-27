@@ -12,8 +12,8 @@
         <div class="small-6 columns">
             <h1 class="text-center">YOU <span v-if="monster.health <= 0">WIN!</span></h1>
             <div class="healthbar-outline">
-                <div 
-                    class="healthbar text-center" 
+                <div
+                    class="healthbar text-center"
                     :style="progressBarPlayer">
                     {{ player.health}}
                 </div>
@@ -23,7 +23,7 @@
             <h1 class="text-center">MONSTER <span v-if="player.health <= 0">WINS!</span></h1>
 
             <div class="healthbar-outline">
-                <div 
+                <div
                     class="healthbar text-center"
                     :style="progressBarMonster">
                     {{ monster.health}}
@@ -34,7 +34,9 @@
     <section class="row controls">
         <div class="small-12 columns">
             <button @click="start" id="start-game">START NEW GAME</button>
+            <div v-if="game.log.length > 0">{{ game.log.length / 2 }}</div>
         </div>
+
     </section>
     <section class="row controls">
         <div v-if="game.playing" class="small-12 columns">
