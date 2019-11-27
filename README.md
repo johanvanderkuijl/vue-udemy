@@ -190,3 +190,5 @@ import Header from './Header.vue'
 Vue.component('my-header', Header)
 ```
 And use ```<my-header></my-header>``` in the main code
+
+the question is, how to have index go up

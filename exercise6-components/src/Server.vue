@@ -1,15 +1,17 @@
 <template>
-    <div>
+    
+        <li class="list-group-item">
         Server #{{ index }}
-    </div>
+        </li>
+    
 </template>
 
 <script>
 export default {
-	data: function() {
-      	return {
-        	index: 1
-        }
-    },
+	// data: function() {
+    //   	return {
+    //     	index: 1
+    //     }
+    // },
 }
 </script>
