@@ -147,3 +147,21 @@ The single file App.vue structure always has:
 - template
 - script
 - style (optional)
+
+now do cmnd+option+J and open vue dev tools to debug your app
+
+## components
+create reusable pieces of code. They shall not have a property named 'data' but a function that returns the data object. Syntax:
+```
+<mydiv></mydiv>
+
+Vue.component('mydiv', {
+	data: function() {
+  	return {
+    	status: 'OK'
+      }
+  },
+  template: '<p>Server status: {{ status }}'
+})
+```
+
