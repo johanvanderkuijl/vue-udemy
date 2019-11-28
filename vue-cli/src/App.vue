@@ -1,18 +1,8 @@
 <template>
-  <div id="app">
-    <h1>hello {{ name }}</h1>
-  </div>
+  <app-servers></app-servers>
 </template>
 
 <script>
-export default {
-  data() { 
-    return {
-      name: 'johan'
-    }
-  }
-  
-}
 </script>
 
 <style>
