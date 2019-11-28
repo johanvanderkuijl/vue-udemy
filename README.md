@@ -165,3 +165,30 @@ Vue.component('mydiv', {
 })
 ```
 
+You can create a source file ie Header.vue with content:
+```
+<template>
+    <div>
+        <h1>Server Status</h1>
+    </div>
+</template>
+
+<script>
+export default {
+	data: function() {
+  	return {
+    	my-var: 'OK'
+      }
+  },    
+}
+</script>
+```
+
+Now include in in the main.js like this:
+```
+import Header from './Header.vue'
+Vue.component('my-header', Header)
+```
+And use ```<my-header></my-header>``` in the main code
+
+the question is, how to have index go up
