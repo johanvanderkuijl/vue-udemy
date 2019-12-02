@@ -192,5 +192,133 @@ Vue.component('my-header', Header)
 And use ```<my-header></my-header>``` in the main code
 
 the question is, how to have index go up
-
 how to show certain rows in table with v-show and v-for.
+and how can we pass props...
+## directory structure
+you could place all components in folder 'components', or group files by feature, like 'users' or 'shop'
+
+The native dom is case insensitive. But when using components you could use PascalCase or camelCase.
+But you could use app-header and appHeader together. The best practice is to use hypens: app-header in the dom.
+
+## scoped style
+By default any style in a component is applied everywhere. Override by using:
+```<style scoped></style>```
+Vue adds a special attribute like data-v-70b76ce2 to the div and adds the style in the main header section.
+
+## props
+used to pass info to components:
+call
+```
+<my-component name='hard-coded'></my-component>
+<my-component :name="name"></my-component>
+
+export default {
+  props: ['array', 'of', 'properties']
+}
+```
+For validating props you can use objects, array's and the required key like this:
+```
+props: {
+  name: String,
+  otherName: [String, Array],
+  myProp: {
+    type: String,
+    required: true
+  }
+}
+You can also use key 'default' for a default value. This can also be a function in case of an object.
+```
+The prop in the component is a reference (pointer) to an object.
+
+The component can emit events with ```this.$emit('nameWasReset', "Johan");```
+You can now listen with ```v-on:nameWasReset="name = $event"``` or with the @ sign: ```@nameWasReset="name = $event"
+The emitted value gets assigned to the name.
+
+It is also possible to pass a callback function to the component as a prop that gets called in the on-click handler.
+See example Section Code (Start)
+
+There are several methods to change a prop in a component:
+- by emitting an event
+- by passing a callback fn
+- event bus!
+
+## event bus
+create the bus in main.js before the main vue instance:```export const eventBus = new Vue();```
+import the bus in the component: ```import { eventBus } from '../main';```
+now emit the events on the bus: ``` eventBus.$emit('myEvent', value)```
+and listen for events:
+```
+    created() {
+        eventBus.$on('selectServer', (data) => {
+            this.data.property = data.property;
+        })
+    }
+```
+You can also add functions and data to the event bus because it's just a Vue intance
+
+## exercise server details
+- how to show details on sub page: render component on click.
+- hoe ga je uit een lijst een geselecteerde server tonen:
+1. hou data bij met 'selected server' deze is leeg maar heeft waarde indien server gekozen door gebruiker
+dan met v-show toon dit element en zijn functies
+
+- where to store the chosen server
+- the data of each server is stored in servers.vue, so should the state of the chosen server also be store there
+  - as separate property
+  - as property in the details of each server?
+
+- why is this.selected not updated?
+- how to reset the state
+
+### solution
+until 2:30 ok with Server component
+at 5:55 changing id to server
+the whole server object is passed as an event
+you must handle the events like this to make this.server work:
+```
+    created() {
+        eventBus.$on('selectServer', (server) => {
+            this.server = server;
+        })
+    }
+```
+on 8:55 he explains this very well.
+
+# Modules / Slots
+We want to quote some combination of h2 and p tags, but cannot do this with props. The
+solution is a component with the reserved ```<slot></slot>``` syntax. You can use this
+if you want to show content like slide shows.  It is called like:
+
+    <app-quote>
+    <h2>header</h2>
+    <p>data</p>
+    </app-quote>
+
+- the child component style is applied, but it can also be applied in the parent
+- the parent vars are calulated before passing the data to the child component
+
+## named slots
+Give multiple slots their own name
+
+    <!-- parent -->
+    <app-quote>
+      <h2 slot="title">header</h2>
+      <p slot="content">header</p>
+    </app-quote>
+
+    <!-- child     -->
+    <slot name="title"></slot>
+    <slot name="content"></slot>
+
+A slot without a name becomes the default slot.
+
+A named slot without content can show default data: ```<slot name="sub">default</slot>```
+
+## dynamic components
+render them like this:
+
+    <component :is="selectedComponent" >
+        default content
+    </component>
+
+
