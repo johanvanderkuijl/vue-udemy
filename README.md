@@ -179,7 +179,7 @@ export default {
   	return {
     	my-var: 'OK'
       }
-  },    
+  },
 }
 </script>
 ```
@@ -192,3 +192,5 @@ Vue.component('my-header', Header)
 And use ```<my-header></my-header>``` in the main code
 
 the question is, how to have index go up
+
+how to show certain rows in table with v-show and v-for.
