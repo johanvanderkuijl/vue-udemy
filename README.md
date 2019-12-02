@@ -321,4 +321,20 @@ render them like this:
         default content
     </component>
 
+# project 2 quotes
+approach:
+1. identify the components:
+- quote  -> displaying quotes in a nice div with float and margin, and onhover: red
+- counter  -> bar that increases from 0-10
+- newQuote  -> textbox with Add Quote button to add quotes
+- info  -> just a message with info
 
+2. business rules:
+- maximum of 10 quotes, after that an popup when adding more
+- clicking a quote removes it
+
+3. data store:
+- quotes: plain array with strings
+
+4. page layout:
+boostrap 4 columns width
