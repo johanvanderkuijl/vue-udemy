@@ -188,6 +188,14 @@ Now include in in the main.js like this:
 ```
 import Header from './Header.vue'
 Vue.component('my-header', Header)
+
+or
+
+    export default {
+        components: {
+            appUser: User
+        }
+    }
 ```
 And use ```<my-header></my-header>``` in the main code
 
@@ -338,3 +346,137 @@ approach:
 
 4. page layout:
 boostrap 4 columns width
+
+The solution of Max is differen on:  
+- using a quotegrid and slots to render the quote   
+- using bootstrap panels  
+- using the given font from the css  
+- creating divs like: ```div.col-sm-8<tab>```  
+- using a form and @click.prevent  
+- using @click.native modifier  
+- styling the progressbar directly: 
+
+    :style="{width: (quoteCount/maxCount) * 100 + '%'}"
+
+# forms
+the .lazy modifier make vue submit data when moving away (like blur)  
+.trim trims the data  
+.number converts to a number  
+you can chain the modifiers like v-model.trim.number  
+show line breaks with ```style="white-space: pre"```  
+multiple checkboxes: bind them to the same model and make array data property: data[]  
+for radiobuttons: vue detects this and makes 1 at the time available  
+dropdown:
+
+    <select
+          id="priority"
+          class="form-control"
+          v-model="selectedPriority">
+          <option v-for="priority in priorities">{{ priority }}
+          </option>
+    </select>
+   priorities: ['important', 'normal', 'should have', 'could have', 'Medium'],
+
+custom v-model: use to make your own switch as a component:
+
+    :value = mymodel.property
+    @input = "mymodel.property = $event.target.value"
+
+# directives
+A v- notation that tells Vue to do something. Each directive has 5 hooks:  
+- bind: once directive is attached
+- inserted: in dom  
+- update: once component is updated (without children)  
+- componentUpdated: like above but with children  
+- unbind: once removed  
+
+```
+main.js:
+Vue.directive('color', {
+  bind(el, binding, vnode) {
+    // <p v-color:background="'red'">whoo</p>
+    console.log('got arg ' + binding.arg) // background
+    console.log('got value ' + binding.value) // red
+    el.style.backgroundColor = binding.value
+  }
+}) 
+```
+
+// v-mydirective:arg=value.modifier
+
+# filters and mixins
+you have to create them yourself, and use them with a pipe | 
+
+global filter:
+```
+Vue.filter('to-lowercase', function(value) {
+  return value.toLowerCase();
+})  
+```
+local filter:
+```
+script:
+filters: {
+  to-uppercase(value) {
+    return value.toUpperCase();
+  }
+}
+
+template with changed filters:
+<p>{{ text | toUppercase | to-lowercase }}
+```
+
+## filter alternative: computed properties
+Vue only recalculates if neccesary
+```
+<input v-model="filterText">
+<ul>
+  <li v-for="fruit in filteredFruits>{{ fruit }}</li>
+</ul>
+
+data() {
+  return {
+    fruits: ['apple', 'banana', 'mango', 'melon'],
+    filterText: ''
+  }
+},
+computed: {
+  filteredFruits() {
+    return this.fruits.filter((element) => {
+      return element.match(this.filterText);
+    });
+  }
+}
+```
+
+## mixins
+use to prevent code duplication  
+the mixin is merged into the other code  
+other code remains intact  
+has lifecycle hooks  
+order: mixin, component  
+
+create fruitMixin.js
+```
+export const reverseMixin = {
+    
+    data(){
+```
+
+include:
+```
+<script>
+import { fruitMixin } from './fruitMixin';
+export default {
+  mixins: [fruitMixin]
+}
+</script>
+```
+
+warning: a global mixin is added in every instance:  
+``` Vue.mixin({ created() { console.log('created')}}) ```
+typically use in development  
+
+if you change data in a mixin it is only updated in the component,ie it is not shared with other parts  
+
+## transitions
