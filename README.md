@@ -480,3 +480,17 @@ typically use in development
 if you change data in a mixin it is only updated in the component,ie it is not shared with other parts  
 
 ## transitions
+animate one element with v-if or v-show in transition block  
+Vue will analyze the css for you for duration   
+```
+<transition name="fade">
+  <p v-if="show>foobar</p>
+</transition>
+
+classes attached (with example):
+* = fade (see name)
+1. *-enter         opacity: 0;
+2. *-enter-active  transition: opacity 1s;
+3. *-leave         /* opacity: 1; */
+4. *-leave-active  transition: opacity 1s; opacity: 0;
+```
