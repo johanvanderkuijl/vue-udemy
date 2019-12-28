@@ -106,3 +106,17 @@ button {
     background-color: #c7c7c7;
 }
 
+.slide-enter {
+    opacity: 0;
+}
+.slide-enter-active {
+    transition: opacity 1s;
+}
+.slide-leave-active {
+    transition: opacity 1s;
+    opacity: 0;
+}
+
+.slide-move {
+    transition: transform 1s;
+}

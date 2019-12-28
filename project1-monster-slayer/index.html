@@ -49,8 +49,15 @@
     </section>
     <section v-show="!game.log.length==0" class="row log">
         <div class="small-12 columns">
-            <ul v-for="item in game.log">
-                <li :class=item.class>{{ item.text }} </li>
+            <ul >
+                <transition-group name="slide">
+                <li 
+                    v-for="(item, index) in game.log" 
+                    :key=index
+                    :class=item.class
+                    >{{ item.text }} 
+                </li>
+                </transition-group>
             </ul>
         </div>
     </section>

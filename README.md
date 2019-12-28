@@ -239,7 +239,7 @@ You can also use key 'default' for a default value. This can also be a function 
 The prop in the component is a reference (pointer) to an object.
 
 The component can emit events with ```this.$emit('nameWasReset', "Johan");```
-You can now listen with ```v-on:nameWasReset="name = $event"``` or with the @ sign: ```@nameWasReset="name = $event"
+You can now listen with ```v-on:nameWasReset="name = $event"``` or with the @ sign: ```@nameWasReset="name = $event"```
 The emitted value gets assigned to the name.
 
 It is also possible to pass a callback function to the component as a prop that gets called in the on-click handler.
@@ -493,4 +493,166 @@ classes attached (with example):
 2. *-enter-active  transition: opacity 1s;
 3. *-leave         /* opacity: 1; */
 4. *-leave-active  transition: opacity 1s; opacity: 0;
+
+There are six classes applied for enter/leave transitions.
+
+v-enter: Starting state for enter. Added before element is inserted, removed one frame after element is inserted.
+
+v-enter-active: Active state for enter. Applied during the entire entering phase. Added before element is inserted, removed when transition/animation finishes. This class can be used to define the duration, delay and easing curve for the entering transition.
+
+v-enter-to: Only available in versions 2.1.8+. Ending state for enter. Added one frame after element is inserted (at the same time v-enter is removed), removed when transition/animation finishes.
+
+v-leave: Starting state for leave. Added immediately when a leaving transition is triggered, removed after one frame.
+
+v-leave-active: Active state for leave. Applied during the entire leaving phase. Added immediately when leave transition is triggered, removed when the transition/animation finishes. This class can be used to define the duration, delay and easing curve for the leaving transition.
+
+v-leave-to: Only available in versions 2.1.8+. Ending state for leave. Added one frame after a leaving transition is triggered (at the same time v-leave is removed), removed when the transition/animation finishes.
+
+There is also transition mode:
+out-in: Current element transitions out first, then when complete, the new element transitions in.
+
 ```
+
+## animations
+slide example with @keyframes from to and transform: translateY    
+you could add type="animation" to the transition so Vue will wait    
+Example
+```
+
+.flip-enter-active {
+    animation: flip-in 0.5s ease-out forwards;
+}
+
+.flip-leave-active {    
+    animation: flip-out 0.5s ease-out forwards;    
+}
+
+@keyframes flip-out {
+    from {
+        transform: rotateY(0deg);
+    }
+    to {
+        transform: rotateY(90deg)
+    }
+}
+
+@keyframes flip-in {
+    from {
+        transform: rotateY(90deg);
+    }
+    to {
+        transform: rotateY(0deg)
+    }
+}
+```
+
+### on load animation
+use ```<transition name="yo" appear>```
+
+### animate.css
+specify the classes you wnat to use, but remove empty classes  
+```
+<transition
+  appear
+  <!-- enter-class="" -->
+  enter-active-class="animated bounce"
+  <!-- leave-class="" -->
+  leave-active-class="animated shake" 
+>
+```
+
+## fading between two animations
+add a unique key to the div in the transitions:  
+```
+<transition mode="out-in">
+  <div key="uniqueName2"></div>
+  <div key="uniqueName2"></div>
+</transition>
+```
+
+## animate with javascript
+you can use the transition JS hooks before-after-enter-leave  
+``` html
+<button class="btn btn-primary" @click="load = !load">Load/remove element</button>
+  
+<transition
+  @before-enter="beforeEnter"
+  @enter="enter"
+  @after-enter="afterEnter"
+  @enter-cancelled="enterCancelled"
+
+  @before-leave=... etc
+  :css="false"
+>
+<div style="width: 100px; height: 100px; background-color: red" v-if="load"></div>
+</transition>
+methods: {
+  beforeEnter(el) {
+    console.log('beforeEnter');
+    this.elementWidth = 100;
+    el.style.width = this.elementWidth + 'px';
+  },
+  enter(el, done) {
+    console.log('enter');
+    let round = 1;
+    const interval = setInterval(() => {
+      el.style.width = (this.elementWidth + round * 10) + 'px';
+      round++;
+      if (round > 10) {
+        clearInterval(interval);
+        done();
+      }
+    }, 20)
+   
+  },
+  leave(el, done) {
+    console.log('leave');
+    // done is a function that needs to be called to inform Vue
+    done();
+  },
+  // etc
+
+}
+```
+you can also use components with :is
+
+## transition groups
+https://www.udemy.com/course/vuejs-2-the-complete-guide/learn/lecture/5975866#overview  
+
+
+dynamic list with add/remove
+``` 
+  <ul class="list-group">
+    <li v-for="(number, index) in numbers"
+      :key="index"
+      class="list-group-item"
+      @click="removeItem(index)"
+      style="cursor: pointer"
+      >{{number}}</li>
+  </ul>
+
+  addItem(){
+    this.numbers.push(1);
+  },
+  removeItem(index) {
+    this.numbers.splice(index, 1);
+  },
+```
+The transition group brings a new property: *-move
+
+# exercise super quiz
+animation: shrink width to 0, then remove
+
+code analysis:
+2 components
+## component question
+question has 4 buttons, calling onAnswer(btnData[0].correct)  
+fn genQuestion creates 2 random digits 1-100 and a mode ADD/SUB  
+the buttondata is populated with 4 wrong answers  
+one button is overwritten with proper answer  
+the boolean 'isCorrect' is emitted to App.vue that renders a component with mode app-question or app-answer 
+
+## component answer
+button w method onNextQuestion, emitting 'confirmed' so mode becomes app-question  
+
+
