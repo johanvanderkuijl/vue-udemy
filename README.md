@@ -546,6 +546,43 @@ Example
 }
 ```
 
+another example with slide:  
+```
+.slide-leave-active {
+  transition: opacity 1s ease;
+  opacity: 0;
+  animation: slide-out 1s ease-out forwards;
+}
+
+.slide-leave {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.slide-enter-active {
+  animation: slide-in 1s ease-out forwards;
+}
+
+@keyframes slide-out {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(-30px);
+    }
+}
+
+@keyframes slide-in {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(-30px);
+    }
+}
+
+```
+
 ### on load animation
 use ```<transition name="yo" appear>```
 
@@ -655,4 +692,219 @@ the boolean 'isCorrect' is emitted to App.vue that renders a component with mode
 ## component answer
 button w method onNextQuestion, emitting 'confirmed' so mode becomes app-question  
 
+# HTTP
+use package vue-resource https://github.com/pagekit/vue-resource  
+```npm install --save vue-resource```
+main.js:  
+``` 
+import VueResource from 'vue-resource';
+Vue.use(VueResource);  
+```
+To use a resource: ```this.$http ```  
+Now use Firebase as backend: Cloud service with database and authentication functionality  
+Create a new firebase project: vuejs-http and create a realtime database  
+Create vue app to post user object  
+Get the firebase link from the firebase project page  
+Get/Post example to firebase:
+```
+ methods: {
+    fetchData() {
+        this.$http.get('https://vuejs-http-342ed.firebaseio.com/data.json')
+            .then(response => {
+                // response.json() is a promise
+                return response.json();
+            })
+            .then(data => {
+                console.log(data);
+                const resultArray = [];
+                for (const key in data) {
+                    resultArray.push(data[key])
+                }
+                console.log(resultArray);
+                this.users = resultArray;
+            });
+    },
+    submit() {
+        console.log(this.user)
+        this.$http.post('https://vuejs-http-342ed.firebaseio.com/data.json', this.user)
+            .then(response => {
+                console.log(response);
+            }, error => {
+                console.log(error);
+            });
+    }
+}
+```
+Also consider setting the root url in main.js:
+```Vue.http.options.root = "https://vuejs-http-342ed.firebaseio.com/data.json"```
+
+## intercepting data
+in main.js:
+```
+// array of functions to apply on each request
+Vue.http.interceptors.push((request, next) => {
+  console.log(request);
+  if (request.method == 'POST') {
+    request.method = 'PUT';
+  }
+  next();
+}); 
+```
+## resources
+https://github.com/pagekit/vue-resource/blob/develop/docs/resource.md 
+
+# routing
+install the router:
+```npm install --save vue-router```
+routes.js: create some routes
+```
+import User from './components/user/User.vue';
+import Home from './components/Home.vue';
+
+export const routes = [
+    { path: '', component: Home },
+    { path: '/user', component: User },
+];
+```
+main.js: import the router
+```
+import Vue from 'vue'
+import VueRouter from 'vue-router';
+import App from './App.vue'
+import { routes } from './routes';
+
+Vue.use(VueRouter);
+
+const router = new VueRouter({
+  routes,
+  mode: 'history' // default mode is hash
+})
+
+new Vue({
+  el: '#app',
+  router,
+  render: h => h(App)
+})
+
+```
+App.vue: render the route
+```
+    <router-view>
+    </router-view>
+```
+with mode 'history' you need to reconfigure the server  
+
+showing active links:
+```
+<template>
+    <ul class="nav nav-pills">
+        <router-link to="/" tag="li" active-class="active" exact><a>Home</a></router-link>
+        <router-link to="/user" tag="li" active-class="active" ><a>User</a></router-link>
+    </ul>
+</template>
+```
+navigate with js in a method:
+```
+    this.$router.push({path: '/'});
+```
+routes with params:
+```
+{ path: '/user/:id', component: User }, // /user/123
+<router-link to="/user/10" tag="li" active-class="active" ><a>User</a></router-link>
+```
+watching route for changes:
+```
+    watch: {
+        '$route' (to, from) {
+            this.id = to.params.id;
+        }
+    },
+```
+In Vue2.2 you can use props: https://github.com/vuejs/vue-router/tree/dev/examples/route-props  
+
+named routes:
+```
+{ path: ':id/edit', component: UserEdit, name: 'userEdit' },
+<router-link :to="{ name: 'userEdit', params: { id: $route.params.id }}" ><a>edit</a></router-link>
+```
+
+query params:
+
+    <router-link 
+        :to="{ 
+            name: 'userEdit', 
+            params: { id: $route.params.id },
+            query: { locale: 'en', q: 100}
+        }" 
+        class="btn btn-primary"
+        >edit
+    </router-link> 
+    Locale: {{ $route.query.locale }}
+
+redirects:
+
+    { path: '/redirect-me', redirect: '/user' }
+    { path: '/redirect-me', redirect: {name: 'home'} }
+    { path: '*', redirect: { name: 'home'}} // catch all
+
+transitions:  
+just wrap the router-view in a transition  
+
+anchor / hash property: scroll user to anchor tag on page:
+```
+    <router-link 
+        :to="{ 
+            name: 'userEdit', 
+            params: { 
+                id: $route.params.id 
+            },
+            query: { 
+                locale: 'en', 
+                q: 100
+            },
+            hash: '#data'
+        }" 
+        class="btn btn-primary"
+        >edit
+    </router-link>
+```
+
+main.js:
+```
+const router = new VueRouter({
+  routes,
+  mode: 'history',
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition;
+    }
+    if (to.hash) {
+      return { selector: to.hash };
+    }
+    //return {x: 0, y: 700};
+  }
+})
+```
+
+intercepting routes. You can control if a user can visit a link.  
+This can be done in main.js,  routes.js, or in  
+a component in function beforeRouteEnter(to, from, next) { next();}
+```
+        { path: ':id', component: UserDetail, beforeEnter: (to, from, next) => {
+            console.log('inside routes.js');
+            next();
+        } },
+```
+You must call always next(). A component will not even load if next() is not called.  
+
+Lazy loading in routes. Google lazy loading + webpack. Only load part of the application when we need it.
+```
+const User = resolve => {
+    require.ensure(['./components/user/User.vue'], () => {
+        resolve(require('./components/user/User.vue'))
+    })
+};
+```
+
+Visual studio multiline edit tip: press ALT and select multiple cursor locations.  
 
