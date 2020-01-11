@@ -790,6 +790,7 @@ new Vue({
 App.vue: render the route
 ```
     <router-view>
+      <!-- the components are rendered here automatically -->
     </router-view>
 ```
 with mode 'history' you need to reconfigure the server  
@@ -908,3 +909,53 @@ const User = resolve => {
 
 Visual studio multiline edit tip: press ALT and select multiple cursor locations.  
 
+# Project 3 Stock trader
+main screen:  
+```
+menu:
+  Stock Trader
+  Portfolio
+  Stocks
+
+  End Day
+  Save and Load >
+    Save Data -> save to db
+    Load Data
+  Funds: funds (start w $10.000)
+
+md12 box with instructions and funds
+```
+
+stocks
+```
+4x stock component, md6 each. with green header with name and price, input quantity and buy button
+after buy, the funds are calculated and the input field is cleared
+bwm price 110, buy 10, funds are 8900
+```
+
+portfolio
+```
+show the bought stocks: name, price, quantity: BMW (price: 110|quantity: 10)
+with inputbox and sell button
+```
+
+end day button:  
+the sell box changes
+BMW price: 75|quantity: 10
+
+stocks page:  
+all stock have new prices. buy again 10 BMW, funds are $8.150  
+
+Portfolio page:  
+BMW price: 75|quantity: 20
+
+end day button multiple times
+BWM price: 79, 81  
+sell 20, funds 9770  
+
+### Issues
++ navbar not working. cause: example bootstrap4, css bootstrap 3  
++ navbar dropdown not working. cause no js included
++ active home link always active, cause: did not use 'exact' in link
++ routes added without problems
+- 
