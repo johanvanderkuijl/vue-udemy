@@ -347,25 +347,25 @@ approach:
 4. page layout:
 boostrap 4 columns width
 
-The solution of Max is differen on:  
-- using a quotegrid and slots to render the quote   
-- using bootstrap panels  
-- using the given font from the css  
-- creating divs like: ```div.col-sm-8<tab>```  
-- using a form and @click.prevent  
-- using @click.native modifier  
-- styling the progressbar directly: 
+The solution of Max is differen on:
+- using a quotegrid and slots to render the quote
+- using bootstrap panels
+- using the given font from the css
+- creating divs like: ```div.col-sm-8<tab>```
+- using a form and @click.prevent
+- using @click.native modifier
+- styling the progressbar directly:
 
     :style="{width: (quoteCount/maxCount) * 100 + '%'}"
 
 # forms
-the .lazy modifier make vue submit data when moving away (like blur)  
-.trim trims the data  
-.number converts to a number  
-you can chain the modifiers like v-model.trim.number  
-show line breaks with ```style="white-space: pre"```  
-multiple checkboxes: bind them to the same model and make array data property: data[]  
-for radiobuttons: vue detects this and makes 1 at the time available  
+the .lazy modifier make vue submit data when moving away (like blur)
+.trim trims the data
+.number converts to a number
+you can chain the modifiers like v-model.trim.number
+show line breaks with ```style="white-space: pre"```
+multiple checkboxes: bind them to the same model and make array data property: data[]
+for radiobuttons: vue detects this and makes 1 at the time available
 dropdown:
 
     <select
@@ -383,12 +383,12 @@ custom v-model: use to make your own switch as a component:
     @input = "mymodel.property = $event.target.value"
 
 # directives
-A v- notation that tells Vue to do something. Each directive has 5 hooks:  
+A v- notation that tells Vue to do something. Each directive has 5 hooks:
 - bind: once directive is attached
-- inserted: in dom  
-- update: once component is updated (without children)  
-- componentUpdated: like above but with children  
-- unbind: once removed  
+- inserted: in dom
+- update: once component is updated (without children)
+- componentUpdated: like above but with children
+- unbind: once removed
 
 ```
 main.js:
@@ -399,19 +399,19 @@ Vue.directive('color', {
     console.log('got value ' + binding.value) // red
     el.style.backgroundColor = binding.value
   }
-}) 
+})
 ```
 
 // v-mydirective:arg=value.modifier
 
 # filters and mixins
-you have to create them yourself, and use them with a pipe | 
+you have to create them yourself, and use them with a pipe |
 
 global filter:
 ```
 Vue.filter('to-lowercase', function(value) {
   return value.toLowerCase();
-})  
+})
 ```
 local filter:
 ```
@@ -450,16 +450,16 @@ computed: {
 ```
 
 ## mixins
-use to prevent code duplication  
-the mixin is merged into the other code  
-other code remains intact  
-has lifecycle hooks  
-order: mixin, component  
+use to prevent code duplication
+the mixin is merged into the other code
+other code remains intact
+has lifecycle hooks
+order: mixin, component
 
 create fruitMixin.js
 ```
 export const reverseMixin = {
-    
+
     data(){
 ```
 
@@ -473,15 +473,15 @@ export default {
 </script>
 ```
 
-warning: a global mixin is added in every instance:  
+warning: a global mixin is added in every instance:
 ``` Vue.mixin({ created() { console.log('created')}}) ```
-typically use in development  
+typically use in development
 
-if you change data in a mixin it is only updated in the component,ie it is not shared with other parts  
+if you change data in a mixin it is only updated in the component,ie it is not shared with other parts
 
 ## transitions
-animate one element with v-if or v-show in transition block  
-Vue will analyze the css for you for duration   
+animate one element with v-if or v-show in transition block
+Vue will analyze the css for you for duration
 ```
 <transition name="fade">
   <p v-if="show>foobar</p>
@@ -514,8 +514,8 @@ out-in: Current element transitions out first, then when complete, the new eleme
 ```
 
 ## animations
-slide example with @keyframes from to and transform: translateY    
-you could add type="animation" to the transition so Vue will wait    
+slide example with @keyframes from to and transform: translateY
+you could add type="animation" to the transition so Vue will wait
 Example
 ```
 
@@ -523,8 +523,8 @@ Example
     animation: flip-in 0.5s ease-out forwards;
 }
 
-.flip-leave-active {    
-    animation: flip-out 0.5s ease-out forwards;    
+.flip-leave-active {
+    animation: flip-out 0.5s ease-out forwards;
 }
 
 @keyframes flip-out {
@@ -546,7 +546,7 @@ Example
 }
 ```
 
-another example with slide:  
+another example with slide:
 ```
 .slide-leave-active {
   transition: opacity 1s ease;
@@ -587,19 +587,19 @@ another example with slide:
 use ```<transition name="yo" appear>```
 
 ### animate.css
-specify the classes you wnat to use, but remove empty classes  
+specify the classes you wnat to use, but remove empty classes
 ```
 <transition
   appear
   <!-- enter-class="" -->
   enter-active-class="animated bounce"
   <!-- leave-class="" -->
-  leave-active-class="animated shake" 
+  leave-active-class="animated shake"
 >
 ```
 
 ## fading between two animations
-add a unique key to the div in the transitions:  
+add a unique key to the div in the transitions:
 ```
 <transition mode="out-in">
   <div key="uniqueName2"></div>
@@ -608,10 +608,10 @@ add a unique key to the div in the transitions:
 ```
 
 ## animate with javascript
-you can use the transition JS hooks before-after-enter-leave  
+you can use the transition JS hooks before-after-enter-leave
 ``` html
 <button class="btn btn-primary" @click="load = !load">Load/remove element</button>
-  
+
 <transition
   @before-enter="beforeEnter"
   @enter="enter"
@@ -640,7 +640,7 @@ methods: {
         done();
       }
     }, 20)
-   
+
   },
   leave(el, done) {
     console.log('leave');
@@ -654,11 +654,11 @@ methods: {
 you can also use components with :is
 
 ## transition groups
-https://www.udemy.com/course/vuejs-2-the-complete-guide/learn/lecture/5975866#overview  
+https://www.udemy.com/course/vuejs-2-the-complete-guide/learn/lecture/5975866#overview
 
 
 dynamic list with add/remove
-``` 
+```
   <ul class="list-group">
     <li v-for="(number, index) in numbers"
       :key="index"
@@ -683,28 +683,28 @@ animation: shrink width to 0, then remove
 code analysis:
 2 components
 ## component question
-question has 4 buttons, calling onAnswer(btnData[0].correct)  
-fn genQuestion creates 2 random digits 1-100 and a mode ADD/SUB  
-the buttondata is populated with 4 wrong answers  
-one button is overwritten with proper answer  
-the boolean 'isCorrect' is emitted to App.vue that renders a component with mode app-question or app-answer 
+question has 4 buttons, calling onAnswer(btnData[0].correct)
+fn genQuestion creates 2 random digits 1-100 and a mode ADD/SUB
+the buttondata is populated with 4 wrong answers
+one button is overwritten with proper answer
+the boolean 'isCorrect' is emitted to App.vue that renders a component with mode app-question or app-answer
 
 ## component answer
-button w method onNextQuestion, emitting 'confirmed' so mode becomes app-question  
+button w method onNextQuestion, emitting 'confirmed' so mode becomes app-question
 
 # HTTP
-use package vue-resource https://github.com/pagekit/vue-resource  
+use package vue-resource https://github.com/pagekit/vue-resource
 ```npm install --save vue-resource```
-main.js:  
-``` 
-import VueResource from 'vue-resource';
-Vue.use(VueResource);  
+main.js:
 ```
-To use a resource: ```this.$http ```  
-Now use Firebase as backend: Cloud service with database and authentication functionality  
-Create a new firebase project: vuejs-http and create a realtime database  
-Create vue app to post user object  
-Get the firebase link from the firebase project page  
+import VueResource from 'vue-resource';
+Vue.use(VueResource);
+```
+To use a resource: ```this.$http ```
+Now use Firebase as backend: Cloud service with database and authentication functionality
+Create a new firebase project: vuejs-http and create a realtime database
+Create vue app to post user object
+Get the firebase link from the firebase project page
 Get/Post example to firebase:
 ```
  methods: {
@@ -748,10 +748,10 @@ Vue.http.interceptors.push((request, next) => {
     request.method = 'PUT';
   }
   next();
-}); 
+});
 ```
 ## resources
-https://github.com/pagekit/vue-resource/blob/develop/docs/resource.md 
+https://github.com/pagekit/vue-resource/blob/develop/docs/resource.md
 
 # routing
 install the router:
@@ -793,7 +793,7 @@ App.vue: render the route
       <!-- the components are rendered here automatically -->
     </router-view>
 ```
-with mode 'history' you need to reconfigure the server  
+with mode 'history' you need to reconfigure the server
 
 showing active links:
 ```
@@ -821,7 +821,7 @@ watching route for changes:
         }
     },
 ```
-In Vue2.2 you can use props: https://github.com/vuejs/vue-router/tree/dev/examples/route-props  
+In Vue2.2 you can use props: https://github.com/vuejs/vue-router/tree/dev/examples/route-props
 
 named routes:
 ```
@@ -831,15 +831,15 @@ named routes:
 
 query params:
 
-    <router-link 
-        :to="{ 
-            name: 'userEdit', 
+    <router-link
+        :to="{
+            name: 'userEdit',
             params: { id: $route.params.id },
             query: { locale: 'en', q: 100}
-        }" 
+        }"
         class="btn btn-primary"
         >edit
-    </router-link> 
+    </router-link>
     Locale: {{ $route.query.locale }}
 
 redirects:
@@ -848,23 +848,23 @@ redirects:
     { path: '/redirect-me', redirect: {name: 'home'} }
     { path: '*', redirect: { name: 'home'}} // catch all
 
-transitions:  
-just wrap the router-view in a transition  
+transitions:
+just wrap the router-view in a transition
 
 anchor / hash property: scroll user to anchor tag on page:
 ```
-    <router-link 
-        :to="{ 
-            name: 'userEdit', 
-            params: { 
-                id: $route.params.id 
+    <router-link
+        :to="{
+            name: 'userEdit',
+            params: {
+                id: $route.params.id
             },
-            query: { 
-                locale: 'en', 
+            query: {
+                locale: 'en',
                 q: 100
             },
             hash: '#data'
-        }" 
+        }"
         class="btn btn-primary"
         >edit
     </router-link>
@@ -887,8 +887,8 @@ const router = new VueRouter({
 })
 ```
 
-intercepting routes. You can control if a user can visit a link.  
-This can be done in main.js,  routes.js, or in  
+intercepting routes. You can control if a user can visit a link.
+This can be done in main.js,  routes.js, or in
 a component in function beforeRouteEnter(to, from, next) { next();}
 ```
         { path: ':id', component: UserDetail, beforeEnter: (to, from, next) => {
@@ -896,7 +896,7 @@ a component in function beforeRouteEnter(to, from, next) { next();}
             next();
         } },
 ```
-You must call always next(). A component will not even load if next() is not called.  
+You must call always next(). A component will not even load if next() is not called.
 
 Lazy loading in routes. Google lazy loading + webpack. Only load part of the application when we need it.
 ```
@@ -907,7 +907,7 @@ const User = resolve => {
 };
 ```
 
-Visual studio multiline edit tip: press ALT and select multiple cursor locations.  
+Visual studio multiline edit tip: press ALT and select multiple cursor locations.
 
 # vuex
 see project lesson-vuex
@@ -961,7 +961,7 @@ Useage in the view:
         counter() {
             return this.$store.getters.funds;
         }
-    }    
+    }
 ```
 
 You can use ...mapGetters([]) to map them automatically, but then you cannot use own properties. to fix this, use the spread operator (...):
@@ -983,7 +983,7 @@ finally, change the file .babelrc by adding:
 Use mutations to change the state, like getters get the state.
 A mutation will change the state, and the components will get the new state. Creater mutations in the vuex store, then call them using import { mapMutations }  and then ...mapMutations
 
-Mutations should run synchronous, so do not use setTimeout() in them.  
+Mutations should run synchronous, so do not use setTimeout() in them.
 in the store:
 ```
     mutations: {
@@ -1051,7 +1051,7 @@ export const store = new Vuex.Store({
 Since all these files are merged together do not use the same name for the functions.
 
 # Project 3 Stock trader
-main screen:  
+main screen:
 ```
 menu:
   Stock Trader
@@ -1080,22 +1080,22 @@ show the bought stocks: name, price, quantity: BMW (price: 110|quantity: 10)
 with inputbox and sell button
 ```
 
-end day button:  
+end day button:
 the sell box changes
 BMW price: 75|quantity: 10
 
-stocks page:  
-all stock have new prices. buy again 10 BMW, funds are $8.150  
+stocks page:
+all stock have new prices. buy again 10 BMW, funds are $8.150
 
-Portfolio page:  
+Portfolio page:
 BMW price: 75|quantity: 20
 
 end day button multiple times
-BWM price: 79, 81  
-sell 20, funds 9770  
+BWM price: 79, 81
+sell 20, funds 9770
 
 ### Issues
-+ navbar not working. cause: example bootstrap4, css bootstrap 3  
++ navbar not working. cause: example bootstrap4, css bootstrap 3
 + navbar dropdown not working. cause no js included
 + active home link always active, cause: did not use 'exact' in link
 + routes added without problems
@@ -1103,3 +1103,4 @@ sell 20, funds 9770
 how to add stocks from state.stocks to portfolio
 1. add portfolio counter to stocks
 2. create separate portfolio storage with join table
++ big issue: access the store inside the store: just use store.fn instead of this.$store.fn

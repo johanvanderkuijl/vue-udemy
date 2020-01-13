@@ -1,6 +1,9 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
+import VueResource from 'vue-resource';
+Vue.use(VueResource);
+
 Vue.use(Vuex);
 
 export const store = new Vuex.Store({
@@ -45,15 +48,19 @@ export const store = new Vuex.Store({
         portfolio: state => {
             // calculate it here
             return state.portfolio;
+        },
+        state: state => {
+            return state;
         }
     },
     mutations: {
         buy: (state, payload) => {
-            let stock = Object.assign({}, payload.stock);
+            // let stock = Object.assign({}, payload.stock);
+            let stock = { ...payload.stock };
             let qty = parseInt(payload.qty);
-            
+
             state.funds -= qty * stock.price;
-            
+
             // now transfer to portfolio
             stock.qty = qty;
 
@@ -67,7 +74,8 @@ export const store = new Vuex.Store({
             }
         },
         sell: (state, payload) => {
-            let stock = Object.assign({}, payload.stock);
+            // let stock = Object.assign({}, payload.stock);
+            let stock = { ...payload.stock };
             let qty = parseInt(payload.qty);
             state.funds = state.funds + qty * stock.price;
 
@@ -78,11 +86,11 @@ export const store = new Vuex.Store({
                 state.portfolio[index].qty -= qty;
                 // console.log(index.toString() + ' exists');
                 if (state.portfolio[index].qty == 0) {
-                   
+
                     state.portfolio.splice(index, 1);
                 }
             }
-           
+
         },
         // calculate new random prices for the stocks
         endDay: (state) => {
@@ -103,9 +111,35 @@ export const store = new Vuex.Store({
                 }
             };
             state.day += 1;
+        },
+        saveData: (state) => {
+            console.log('store.js saveData:');
+            console.log(state);
+            Vue.http.put('https://stock-a9d07.firebaseio.com/state.json', state)
+                .then(response => {
+                    console.log(response);
+                }, error => {
+                    console.log(error);
+                });
+        },
+        loadData: (state) => {
+            console.log("getting state");
+            Vue.http
+                .get("https://stock-a9d07.firebaseio.com/state.json")
+                .then(response => {
+                    return response.json();
+                })
+                .then(
+                    data => {
+                        console.log(data);
+                        store.replaceState(data);
+                    },
+                    error => {
+                        console.log(error);
+                    }
+                );
         }
     },
     actions: {
-
     }
 });

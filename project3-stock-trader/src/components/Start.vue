@@ -1,21 +1,23 @@
 <template>
-    <div class="row">
-        <div class="col">
-            <h1>Trade or View your portfolio</h1>
-            <p>You may save and load your data</p>
-            <p>Click 'End Day' to finish the day</p>
-            <hr>
-            <h2>Your funds: xx</h2>
-        </div>
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header bg-light">Trade or View your portfolio</div>
+      <div class="card-body">
+          <p class="card-text">You may save and load your data</p>
+          <p class="card-text">Click 'Next Day' to advance one day</p>
+          <p class="card-text">Your funds: {{ funds }}</p>
+          <router-link to="/stocks" class="btn btn-primary">Show stocks</router-link>
+      </div>
     </div>
-    
+  </div>
 </template>
 
-<style scoped>
-    .row {
-        border: 1px solid #aaa;
-        margin: 10px;
-        padding-top: 25px;
-        padding-bottom: 20px;
+<script>
+export default {
+  computed: {
+    funds() {
+      return this.$store.getters.funds;
     }
-</style>
+  }
+}
+</script>

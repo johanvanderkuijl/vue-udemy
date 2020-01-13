@@ -12,9 +12,9 @@
             <p class="text-right">
               <span v-if="stype=='buy'">
                 <a href="#" @click="buy({stock: stock, qty: qty})" class="btn btn-success">Buy</a>
-              </span> 
+              </span>
               <span v-else>
-                <a href="#" @click="sell({stock: stock, qty: qty})" class="btn btn-danger">Sell</a> 
+                <a href="#" @click="sell({stock: stock, qty: qty})" class="btn btn-danger">Sell</a>
               </span>
 
             </p>
@@ -41,10 +41,15 @@ export default {
   methods: {
     buy(payload) {
       if (payload.stock.price * this.qty <= this.funds ) {
-          this.$store.commit("buy", payload);
+        this.$store.commit("buy", payload);
+        this.qty = "";
       } else {
-          alert('je hebt niet genoeg geld');
+          return(alert('je hebt niet genoeg geld'));
       }
+
+      // if (this.qty < 1) {
+      //   alert("Vul een getal van 1 of meer in.")
+      // }
       this.qty = "";
     },
     sell(payload) {
