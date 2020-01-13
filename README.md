@@ -916,6 +916,8 @@ Key is that the state of objects is stored on a centralized location.
 
 central store: holds the state
 
+concepts: state, getters, mutations, actions
+
 install vuex:
 ```npm install --save vuex```
 maak dan een store.js aan:
@@ -924,8 +926,43 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 
 Vue.use(Vuex);
+
+export const store = new Vuex.Store({
+    state: {
+        funds: 10000
+    }
+});
 ```
-Use getters to get data and perform calculations
+change main.js:
+```
+import Vue from 'vue'
+import App from './App.vue'
+
+import { store } from './store/store';
+
+new Vue({
+  el: '#app',
+  store,
+  render: h => h(App)
+})
+```
+
+Use getters to get data and perform calculations: TODO CHECK
+```
+    getters: {
+        funds: state => {
+            return state.funds;
+        }
+    }
+```
+Useage in the view:
+```
+    computed: {
+        counter() {
+            return this.$store.getters.funds;
+        }
+    }    
+```
 
 You can use ...mapGetters([]) to map them automatically, but then you cannot use own properties. to fix this, use the spread operator (...):
 ```
@@ -946,8 +983,29 @@ finally, change the file .babelrc by adding:
 Use mutations to change the state, like getters get the state.
 A mutation will change the state, and the components will get the new state. Creater mutations in the vuex store, then call them using import { mapMutations }  and then ...mapMutations
 
-Mutations should run synchronous, so do not use setTimeout() in them.
-
+Mutations should run synchronous, so do not use setTimeout() in them.  
+in the store:
+```
+    mutations: {
+        buy: (state, payload) => {
+            state.funds -= payload;
+        }
+    }
+```
+in the component:
+```
+<script>
+    import { mapActions } from 'vuex';
+    export default {
+        methods: {
+            ...mapActions([
+                'asyncIncrement',
+                'asyncDecrement'
+            ])
+        }
+    }
+</script>
+```
 ### actions
 Extra function where you may run async tasks, and commit the results. You can use setTimeout here.
 ```
@@ -1041,4 +1099,7 @@ sell 20, funds 9770
 + navbar dropdown not working. cause no js included
 + active home link always active, cause: did not use 'exact' in link
 + routes added without problems
-- adding vuex
++ adding vuex
+how to add stocks from state.stocks to portfolio
+1. add portfolio counter to stocks
+2. create separate portfolio storage with join table
