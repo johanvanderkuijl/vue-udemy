@@ -11,7 +11,11 @@
           <div class="col">
             <p class="text-right">
               <span v-if="stype=='buy'">
-                <a href="#" @click="buy({stock: stock, qty: qty})" class="btn btn-success">Buy</a>
+                <button
+                    @click="buy({stock: stock, qty: qty})" 
+                    class="btn btn-success"
+                    :disabled="qty <= 0 || !Number.isInteger(qty)"
+                >Buy</button>
               </span>
               <span v-else>
                 <a href="#" @click="sell({stock: stock, qty: qty})" class="btn btn-danger">Sell</a>

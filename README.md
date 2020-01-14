@@ -407,7 +407,7 @@ Vue.directive('color', {
 # filters and mixins
 you have to create them yourself, and use them with a pipe |
 
-global filter:
+global filter. in main.js:
 ```
 Vue.filter('to-lowercase', function(value) {
   return value.toLowerCase();
@@ -483,7 +483,7 @@ if you change data in a mixin it is only updated in the component,ie it is not s
 animate one element with v-if or v-show in transition block
 Vue will analyze the css for you for duration
 ```
-<transition name="fade">
+<transition name="fade" mode="out-in">
   <p v-if="show>foobar</p>
 </transition>
 
@@ -548,36 +548,31 @@ Example
 
 another example with slide:
 ```
-.slide-leave-active {
-  transition: opacity 1s ease;
-  opacity: 0;
-  animation: slide-out 1s ease-out forwards;
-}
-
-.slide-leave {
-  opacity: 1;
-  transform: translateX(0);
-}
-
 .slide-enter-active {
-  animation: slide-in 1s ease-out forwards;
+    animation: slide-in 0.15s ease-out forwards;
 }
-
-@keyframes slide-out {
-    0% {
-        transform: translateY(0);
-    }
-    100% {
-        transform: translateY(-30px);
-    }
+.slide-leave-active {
+  animation: slide-out 0.15s ease-out forwards;
 }
 
 @keyframes slide-in {
-    0% {
-        transform: translateY(0);
-    }
-    100% {
+    from {
         transform: translateY(-30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+@keyframes slide-out {
+    from {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateY(-30px);
+        opacity: 0;
     }
 }
 
@@ -1104,3 +1099,90 @@ how to add stocks from state.stocks to portfolio
 1. add portfolio counter to stocks
 2. create separate portfolio storage with join table
 + big issue: access the store inside the store: just use store.fn instead of this.$store.fn
+
+### Solutions
+add spread operator
+create components
+install vue-router
+create routes
+add router-view
+build header component
+copy navbar from bootstrap
+create stocks with dummy stocks
+
+### differences
+max puts the router-view inside div.row and div.col-xs-12  
+input type=number  
+pull-left / pull-right for alignment  
+use buy button instead of link  
+add to button: :disabled="qty <= 0 || !Number.isInteger(qty)
+the mutations are capital strings  
+stocks are in a separatate vuex module  
+import data file: ``` import stocks from '../../data/stocks'; ```  
+stocks.js:
+```
+export default [
+  { id: 1, name: 'xyz'}
+];
+```
+the portfolio is a separate module with its own stocks[] and funds  
+the finder is different:
+```
+const record = state.stocks.find(e => e.id == stock.id)
+```
+dropdown menu:  either use bootstrap or create your own:
+```
+// create property
+isDropdownOpen: false;
+// dynamically add 'show' class to dropdown after click
+@click="isDropdownOpen = !isDropdownOpen"
+:class="{open: isDropdownOpen}"
+
+example:
+        <li class="nav-item dropdown" 
+            :class="{show: isDropdownOpen}"
+            @click="isDropdownOpen = !isDropdownOpen"
+            >
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            id="navbarDropdown"
+            role="button"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >Save & Load</a>
+          <div class="dropdown-menu" :class="{show: isDropdownOpen}" aria-labelledby="navbarDropdown">
+            <a @click="saveData" class="dropdown-item" href="#">Save Data</a>
+            <a @click="loadData" class="dropdown-item" href="#">Load Data</a>
+          </div>
+        </li>
+```
+vue-resource: use root url option  
+save data: do not use vuex. in navbar/header: create object to save data:
+```
+const data = { funds: this.$store.getters.funds, etc}
+```
+the load data should be in an action because async  
+
+# deployment
+create aws account  
+create s3 bucket and allow all permissions  
+enable static webhosting, both index.html  
+google 'aws bucket policy static website' and copy the bucket policy  
+example:
+```
+ {
+  "Version":"2012-10-17",
+  "Statement":[{
+	"Sid":"PublicReadGetObject",
+        "Effect":"Allow",
+	  "Principal": "*",
+      "Action":["s3:GetObject"],
+      "Resource":["arn:aws:s3:::vuejs-stocktrader-001/*"
+      ]
+    }
+  ]
+}
+```
+now upload index.html and dist/build.js

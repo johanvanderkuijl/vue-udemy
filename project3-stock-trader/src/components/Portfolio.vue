@@ -4,6 +4,7 @@
             v-for="(stock, i) in portfolio"
             :stock=stock
             stype="sell"
+            :key=i
         ></app-stock> 
 
         

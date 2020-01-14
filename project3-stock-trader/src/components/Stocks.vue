@@ -4,6 +4,7 @@
             v-for="(stock, i) in stocks"
             :stock=stock
             stype="buy"
+            :key="i"
         ></app-stock>        
     </div>
 </template>

@@ -5,7 +5,7 @@
       <div class="card-body">
           <p class="card-text">You may save and load your data</p>
           <p class="card-text">Click 'Next Day' to advance one day</p>
-          <p class="card-text">Your funds: {{ funds }}</p>
+          <p class="card-text">Your funds: {{ funds | withEuro }}</p>
           <router-link to="/stocks" class="btn btn-primary">Show stocks</router-link>
       </div>
     </div>

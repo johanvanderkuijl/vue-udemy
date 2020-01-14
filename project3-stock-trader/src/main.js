@@ -9,6 +9,10 @@ import { store } from './store';
 Vue.use(VueRouter);
 Vue.use(VueResource);
 
+Vue.filter('withEuro', function(value) {
+  return "€ " + value;
+})
+
 const router = new VueRouter({
   routes,
   mode: 'history' // default mode is hash
