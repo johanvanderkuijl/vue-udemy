@@ -36,8 +36,7 @@
           <a class="nav-link" @click="endDay" href="#">Next Day ({{ day }})</a>
         </li>
         <li class="nav-item dropdown" 
-            :class="{show: isDropdownOpen}"
-            @click="isDropdownOpen = !isDropdownOpen"
+          
             >
           <a
             class="nav-link dropdown-toggle"
@@ -48,7 +47,7 @@
             aria-haspopup="true"
             aria-expanded="false"
           >Save & Load</a>
-          <div class="dropdown-menu" :class="{show: isDropdownOpen}" aria-labelledby="navbarDropdown">
+          <div class="dropdown-menu"  aria-labelledby="navbarDropdown">
             <a @click="saveData" class="dropdown-item" href="#">Save Data</a>
             <a @click="loadData" class="dropdown-item" href="#">Load Data</a>
           </div>

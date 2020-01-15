@@ -1186,3 +1186,122 @@ example:
 }
 ```
 now upload index.html and dist/build.js
+
+# Axios
+axios is an alternative to vue-resource  
+install:
+``` npm install --save axios 
+
+import axios from 'axios';
+  axios.post(
+    'https://vuejs-axios-bfafd.firebaseio.com/users.json',
+    formData)
+  .then(res => console.log(res))
+  .catch(error => console.log(error))
+
+  axios.get('https://vuejs-axios-bfafd.firebaseio.com/users.json')
+    .then(res => console.log(res))
+    .catch(error => console.log(error))
+  }
+
+converting js obj to arr:
+          const data = res.data
+          const users = []
+          for (const key in data) {
+            const user = data[key]
+            user.id = key
+            users.push(user)
+          }
+          console.log(users)
+  ```
+setting baseURL in main.js
+```
+import axios from 'axios';
+axios.defaults.baseURL = 'https://vuejs-axios-bfafd.firebaseio.com/'
+axios.defaults.headers.common['Authorization'] = 'yo test'
+axios.defaults.headers.get['Accepts'] = 'application/json'
+
+```
+### interceptors
+function executed on every request
+```
+// middleware, add interceptor
+const reqInterceptor = axios.interceptors.request.use(config => {
+  console.log('Request interceptor', config)
+  config.headers['XYZ'] = 'b'
+  return config
+})
+
+axios.interceptors.response.use(res => {
+  console.log('Response interceptor', res)
+  return res
+})
+
+// remove interceptor
+axios.interceptors.request.eject(reqInterceptor)
+```
+### custom axios instances
+create axios-auth.js
+```
+import axios from 'axios'
+const instance = axios.create({
+    baseURL: 'https://vuejs-axios-bfafd.firebaseio.com'
+})
+
+instance.defaults.headers.common['ABCD'] = 'ABCD'
+
+export default instance
+```
+component.vue:
+```
+import axios from '../../axios-auth';
+```
+# authentication
+send username+pass  
+receive token  
+store token in localStorage  
+on next requests, always add token
+firebase auth: enable email login    
+firebase database rules:
+```
+{
+  "rules": {
+    ".read": "auth != null",
+    ".write": true
+  }
+}
+```
+now google for 'firebase auth rest api' and look for email login  
+copy the web key from the project page
+post to the proper url:  
+```
+baseURL: 'https://identitytoolkit.googleapis.com/v1'
+endpoint: ''/accounts:signUp?key=abcdlongkey'
+```
+### protect a route: 
+in routes.js:
+```
+  { 
+    path: '/dashboard', 
+    component: DashboardPage,
+    beforeEnter (to, from, next) {
+      if (store.state.idToken) {
+        next()
+      } else {
+        next('/signin')
+      }
+    }  
+  }
+  ```
+
+### logout
+store.js
+```
+  import router from './router'
+  actions: {
+      logout({commit}) {
+        commit('logout')
+        router.replace('/signin')
+      }
+  }
+```
