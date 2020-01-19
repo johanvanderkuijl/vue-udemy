@@ -904,6 +904,21 @@ const User = resolve => {
 
 Visual studio multiline edit tip: press ALT and select multiple cursor locations.
 
+### lazy loading in vue cli 3
+```
+const User = () => import('./components/user/User.vue');
+...
+export const routes = [
+    ...,
+    {
+        path: '/user', components: {
+            default: User,
+            ...
+        }
+    }
+];
+```
+
 # vuex
 see project lesson-vuex
 centralized state management, when props or the event bus is not enough.
@@ -1111,21 +1126,21 @@ copy navbar from bootstrap
 create stocks with dummy stocks
 
 ### differences
-max puts the router-view inside div.row and div.col-xs-12  
-input type=number  
-pull-left / pull-right for alignment  
-use buy button instead of link  
+max puts the router-view inside div.row and div.col-xs-12
+input type=number
+pull-left / pull-right for alignment
+use buy button instead of link
 add to button: :disabled="qty <= 0 || !Number.isInteger(qty)
-the mutations are capital strings  
-stocks are in a separatate vuex module  
-import data file: ``` import stocks from '../../data/stocks'; ```  
+the mutations are capital strings
+stocks are in a separatate vuex module
+import data file: ``` import stocks from '../../data/stocks'; ```
 stocks.js:
 ```
 export default [
   { id: 1, name: 'xyz'}
 ];
 ```
-the portfolio is a separate module with its own stocks[] and funds  
+the portfolio is a separate module with its own stocks[] and funds
 the finder is different:
 ```
 const record = state.stocks.find(e => e.id == stock.id)
@@ -1139,7 +1154,7 @@ isDropdownOpen: false;
 :class="{open: isDropdownOpen}"
 
 example:
-        <li class="nav-item dropdown" 
+        <li class="nav-item dropdown"
             :class="{show: isDropdownOpen}"
             @click="isDropdownOpen = !isDropdownOpen"
             >
@@ -1158,18 +1173,18 @@ example:
           </div>
         </li>
 ```
-vue-resource: use root url option  
+vue-resource: use root url option
 save data: do not use vuex. in navbar/header: create object to save data:
 ```
 const data = { funds: this.$store.getters.funds, etc}
 ```
-the load data should be in an action because async  
+the load data should be in an action because async
 
 # deployment
-create aws account  
-create s3 bucket and allow all permissions  
-enable static webhosting, both index.html  
-google 'aws bucket policy static website' and copy the bucket policy  
+create aws account
+create s3 bucket and allow all permissions
+enable static webhosting, both index.html
+google 'aws bucket policy static website' and copy the bucket policy
 example:
 ```
  {
@@ -1188,9 +1203,9 @@ example:
 now upload index.html and dist/build.js
 
 # Axios
-axios is an alternative to vue-resource  
+axios is an alternative to vue-resource
 install:
-``` npm install --save axios 
+``` npm install --save axios
 
 import axios from 'axios';
   axios.post(
@@ -1257,11 +1272,11 @@ component.vue:
 import axios from '../../axios-auth';
 ```
 # authentication
-send username+pass  
-receive token  
-store token in localStorage  
+send username+pass
+receive token
+store token in localStorage
 on next requests, always add token
-firebase auth: enable email login    
+firebase auth: enable email login
 firebase database rules:
 ```
 {
@@ -1271,18 +1286,18 @@ firebase database rules:
   }
 }
 ```
-now google for 'firebase auth rest api' and look for email login  
+now google for 'firebase auth rest api' and look for email login
 copy the web key from the project page
-post to the proper url:  
+post to the proper url:
 ```
 baseURL: 'https://identitytoolkit.googleapis.com/v1'
 endpoint: ''/accounts:signUp?key=abcdlongkey'
 ```
-### protect a route: 
+### protect a route:
 in routes.js:
 ```
-  { 
-    path: '/dashboard', 
+  {
+    path: '/dashboard',
     component: DashboardPage,
     beforeEnter (to, from, next) {
       if (store.state.idToken) {
@@ -1290,7 +1305,7 @@ in routes.js:
       } else {
         next('/signin')
       }
-    }  
+    }
   }
   ```
 
@@ -1305,3 +1320,364 @@ store.js
       }
   }
 ```
+
+# Vue CLI 3
+install vue cli 3:
+```
+sudo npm install -g @vue/cli
+```
+this will change the vue-init binary!
+now create a project:
+on error, remove node_modules directory in your home dir
+```
+vue create <project-name>
+  now use preset or use custom config
+  custom config:
+  - add plugins
+    - pwa
+    - eslint
+  - save as preset
+now develop and build
+add plugins later is now possible!
+```
+the config is stored in ~/.vuerc
+now start the server:
+``` npm run serve ```
+files in src/assets will be optimized by webpack
+## plugins
+naming conventions: ```vue-cli-plugin-<name>```
+for example name=vuetify
+now install in command line using:
+```vue add vuetify```
+it asks you for options
+you still can install axios the normal way npm install --save axios
+
+## css / sass
+if you change from css to sass:
+```
+<style scoped lang="scss">
+/* sass syntax */
+footer {
+  small {
+    color: red;
+  }
+}
+</style>
+```
+now you can have an error because a sass-loader could not be found
+run:
+```
+npm install --save sass-loader node-sass
+```
+## env vars
+Create a .env file in the root with key value pairs and prefix VUE_APP
+``` VUE_APP_MYVAR=value```
+now reference it in data:
+```url: process.env.VUE_APP_MYVAR,```
+also restart the dev server
+default env files:
+```
+.env
+.env.development
+.env.test
+.env.production (for npm run build)
+```
+they overwrite the default .env file
+
+## building the app
+building uses ue-cli-service that is installed automatically locally
+first edit the package.json file
+look for "scripts" and change to:
+```
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "build:development": "vue-cli-service build --mode development"
+  }
+ ```
+ save and run on the cli:
+ ``` npm run build:development ```
+ check the dist folder for the results
+
+## instant prototyping
+install global cli-service:
+``` npm install -g @vue/cli-service-global ```
+now you can run build on a global level, but also run a simple vue component! Create a component:
+```
+<template>
+<h1>Hello!</h1>
+</template>
+```
+and run: ``` vue serve Hello.vue ```
+## different build targets
+there are 3 ways:
+```
+1. build as vue app:
+   vue build [--target app]
+   includes normal vue app bundle, contains code+framework
+2. build as library:
+   vue build --target lib
+   creates a vue library bundle for usage in vue
+3. build as web component:
+   vue build --target wc
+   this is a custom html element that you can use without vue!
+   it is a reusable web component as a javascript file
+   can be dumped into any page where you import vue
+```
+Example with Hello.vue:
+``` vue build Hello.vue --target app ```
+now install a global webserver
+```
+npm install -g http-server
+cd dist
+http-server
+```
+it will pick up the index.html and server the app
+
+Now lets build a lib:
+``` vue build Hello.vue --target lib ```
+with the ouput in folder dist you could create an npm package.
+
+And finally the web component
+``` vue build Hello.vue --target wc --name my-greeting ```
+now you can use in ANY web app:
+```
+<meta charset="utf-8">
+<title>my-greeting demo</title>
+<script src="https://unpkg.com/vue"></script>
+<script src="./my-greeting.js"></script>
+
+<my-greeting></my-greeting>
+```
+
+## using the old templates
+vue init will not work. to solve:
+``` npm install -g @vue/cli-init ```
+you can now run again
+``` vue init webpack-simple my-old-project ```
+
+## using the GUI
+run ```vue ui``` and follow along!
+
+# Meetup project
+This project is available on Youtube but is uses vuetify 1.5.
+Make sure to read the upgrade guide: https://vuetifyjs.com/en/getting-started/releases-and-migrations
+The course: https://www.youtube.com/watch?v=at6QjSwKOuA&list=PL55RiY5tL51qxUbODJG9cgrsVd7ZHbPrt&index=6
+```
+vue create yt-devmeetup
+//choose router, standard config, es lint
+//now add the vuetify plugin:
+vue add vuetify
+npm run serve
+```
+### visibility
+https://vuetifyjs.com/en/styles/display#visibility
+Visible on small devices only:
+``` class="d-flex d-sm-none" ```
+Hidden on small devices only:
+``` class="d-none d-sm-flex" ```
+example:
+```
+    <v-app-bar>
+      <v-toolbar >
+        <v-app-bar-nav-icon class="d-flex d-sm-none" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+        <v-toolbar-title>DevMeetup</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-toolbar-items class="d-none d-sm-flex">
+          <v-btn text to='/test'>
+            <v-icon left>mdi-account-supervisor</v-icon>
+            View Meetups
+          </v-btn>
+        </v-toolbar-items>
+      </v-toolbar>
+    </v-app-bar>
+```
+colors: google material-colors, for example:
+```<v-toolbar class="purple darken-1">```
+with v-toolbar dark you can make the text white
+
+### links
+button links without router-link:
+```
+<v-btn
+  v-for="item in menuItems"
+  :key=item.title
+  text
+  router
+  :to="item.link"
+  >
+  <v-icon left>{{ item.icon }}</v-icon>
+  {{ item.title }}
+</v-btn>
+```
+
+### vuetify working layout:
+```
+<template>
+  <v-app>
+    <v-navigation-drawer
+      v-model="drawer"
+      app
+      temporary
+    >
+      <v-list  dense>
+        <v-list-item
+          v-for="item in menuItems"
+          :key=item.title
+          router
+          :to="item.link"
+          >
+          <v-list-item-action>
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
+
+    <v-app-bar
+      app
+    >
+      <v-toolbar>
+        <v-app-bar-nav-icon
+          class="d-flex d-sm-none"
+          @click.stop="drawer = !drawer">
+        </v-app-bar-nav-icon>
+        <v-toolbar-title>
+          <router-link to='/' tag='span' style="cursor: pointer">DevMeetup</router-link>
+        </v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-toolbar-items class="d-none d-sm-flex">
+          <v-btn
+            v-for="item in menuItems"
+            :key=item.title
+            text
+            router
+            :to="item.link"
+            >
+            <v-icon left>{{ item.icon }}</v-icon>
+            {{ item.title }}
+          </v-btn>
+        </v-toolbar-items>
+      </v-toolbar>
+    </v-app-bar>
+
+    <v-content>
+      <v-container
+
+      >
+        <router-view></router-view>
+      </v-container>
+    </v-content>
+
+  </v-app>
+</template>
+
+<script>
+```
+
+### Home component
+row layout, should wrap
+inside are v-flex items with xs12 sm6
+
+vuetify 1.5: v-container, v-layout, v-flex, v-spacer
+
+vuetify 2.x: v-container, v-row, v-col, v-spacer
+
+md6 xs12 etc:
+
+pull buttons left and right with:
+```
+<p class="text-left">Left aligned text on all viewport sizes.</p>  <p class="text-sm-left">Left aligned text on SM (small) or wider.</p>
+```
+
+to add margin below:
+```<v-row class="mb-2">```
+
+### updating vue, vuetify
+update the version in package.json and run ```npm install```
+
+the 'router' tag is not needed anymore
+
+### meetup component
+
+Meetups.vue:
+```
+<template>
+  <v-container>
+    <v-row>
+      <v-col>
+        <p>hello world</p>
+      </v-col>
+    </v-row>
+  </v-container>
+</template>
+
+```
+### sizing
+change the number of columns depending on the screen size
+```
+<v-col cols="12"> // default 12 columns (which is also default)
+<v-col sm="6"> // on xs, use 12. on small AND greater, use 6 columns
+so use sm(600-960px), md(-1264), lg(-1904), xl(1904+)
+also use offset-md-1 to offset 1 on md screens
+```
+### meetup
+since Vuetify 2 is different than 1, we will follow the docs now for styling. Push items to the right with v-spacer. This is a nice card:
+```
+```
+
+# Adding vuex
+```
+1. vue add vuex
+2. vue ui
+```
+
+### simple router to link
+```<v-btn :to="'/meetups/' + meetup.id" text>```
+
+### some shortcuts in vscode
+```
+CMD+P,@ -> show file structure and functions in a file
+CMD-K Z -> zen mode
+
+### meetups/id route
+the id is passed to the component and can be used in the getter
+component:
+```
+export default {
+  props: ['id'],
+  computed: {
+    meetup () {
+      return this.$store.getters.loadedMeetup(this.id)
+    }
+  }
+}
+```
+routes.js:
+```
+  {
+    path: '/meetups/:id',
+    name: 'Meetup',
+    props: true,
+    component: Meetup
+  },
+```
+store.js getter:
+```
+    loadedMeetup (state) {
+      console.log('getters: loadedMeetup')
+      return (meetupId) => {
+        return state.loadedMeetups.find((meetup) => {
+          console.log('trying id', meetup.id)
+          return meetup.id === meetupId
+        })
+      }
+    }
+```
+
+### new meetup
+uses forms with validation
