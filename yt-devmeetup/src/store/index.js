@@ -39,6 +39,7 @@ export default new Vuex.Store({
         location: payload.location,
         imageUrl: payload.imageUrl,
         description: payload.description,
+        date: payload.date,
         id: 'l2k34jl2jfsdk'
       }
       // or send payload directly

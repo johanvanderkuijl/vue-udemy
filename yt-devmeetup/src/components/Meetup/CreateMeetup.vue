@@ -19,9 +19,25 @@
             multi-line
             required
           ></v-textarea>
+        <v-row justify="left">
+<h3>Choose a date and time</h3>
+        </v-row>
+        <v-row justify="left">
+            <v-date-picker class="mb-2" v-model="date"></v-date-picker>
+            <p>{{ date }}</p>
+        </v-row>
+        <v-row justify="left">
+            <v-time-picker
+                class="mb-2"
+                v-model="time"
+                format="24hr"
+            ></v-time-picker>
+            <p>{{ time }}</p>
+        </v-row>
           <v-row>
             <v-spacer></v-spacer>
             <v-btn class="primary" :disabled="!formIsValid" type="submit">Create Meetup</v-btn>
+            {{ submitableDateTime }}
           </v-row>
         </v-col>
       </v-row>
@@ -37,7 +53,9 @@ export default {
       location: '',
       imageUrl:
         'https://upload.wikimedia.org/wikipedia/commons/d/da/Frauenkirche_Munich_-_View_from_Peterskirche_Tower2.jpg',
-      description: ''
+      description: '',
+      date: '',
+      time: new Date()
     }
   },
   computed: {
@@ -48,6 +66,13 @@ export default {
         this.imageUrl !== '' &&
         this.description !== ''
       )
+    },
+    submitableDateTime () {
+      const date = new Date(this.date)
+      date.setHours(this.time.getHours())
+      date.setMinutes(this.time.getMinutes())
+      console.log(date)
+      return date
     }
   },
   methods: {
