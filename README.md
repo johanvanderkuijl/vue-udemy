@@ -1681,3 +1681,21 @@ store.js getter:
 
 ### new meetup
 uses forms with validation
+
+# Firebase SDK
+copy the web code from the project page
+main.js:
+```
+import * as firebase from 'firebase'`
+  created () {
+    firebase.initializeApp({
+      apiKey: '',
+      authDomain: '',
+      databaseURL: '',
+      projectId: '',
+      storageBucket: '',
+      messagingSenderId: '',
+      appId: ''
+    })
+  }
+  ```

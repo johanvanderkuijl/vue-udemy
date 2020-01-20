@@ -19,25 +19,25 @@
             multi-line
             required
           ></v-textarea>
-        <v-row justify="left">
+        <v-row >
 <h3>Choose a date and time</h3>
         </v-row>
-        <v-row justify="left">
-            <v-date-picker class="mb-2" v-model="date"></v-date-picker>
-            <p>{{ date }}</p>
+        <v-row >
+            <v-date-picker
+              class="mb-2"
+              v-model="date"
+            ></v-date-picker>
         </v-row>
-        <v-row justify="left">
+        <v-row>
             <v-time-picker
                 class="mb-2"
                 v-model="time"
                 format="24hr"
             ></v-time-picker>
-            <p>{{ time }}</p>
         </v-row>
           <v-row>
             <v-spacer></v-spacer>
             <v-btn class="primary" :disabled="!formIsValid" type="submit">Create Meetup</v-btn>
-            {{ submitableDateTime }}
           </v-row>
         </v-col>
       </v-row>
@@ -54,8 +54,13 @@ export default {
       imageUrl:
         'https://upload.wikimedia.org/wikipedia/commons/d/da/Frauenkirche_Munich_-_View_from_Peterskirche_Tower2.jpg',
       description: '',
-      date: '',
-      time: new Date()
+      date: new Date().toISOString().substr(0, 10),
+      time: new Date().getHours() + ':' + new Date().getMinutes()
+      // time: ''
+      // date: new Date().toJSON(),
+      // time: new Date().toJSON(),
+      // date: new Date().toISOString().substr(0, 10),
+      // time: new Date().getHours() + ':' + new Date().getMinutes()
     }
   },
   computed: {
@@ -69,8 +74,9 @@ export default {
     },
     submitableDateTime () {
       const date = new Date(this.date)
-      date.setHours(this.time.getHours())
-      date.setMinutes(this.time.getMinutes())
+      const hours = this.time.split(':')[0]
+      const minutes = this.time.split(':')[1]
+      date.setHours(hours, minutes)
       console.log(date)
       return date
     }
@@ -85,7 +91,7 @@ export default {
         location: this.location,
         description: this.description,
         imageUrl: this.imageUrl,
-        date: new Date()
+        date: this.submitableDateTime
       }
       this.$store.dispatch('createMeetup', meetupData)
       this.$router.push('/meetups')

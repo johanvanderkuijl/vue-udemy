@@ -11,14 +11,18 @@ export default new Vuex.Store({
           'https://upload.wikimedia.org/wikipedia/commons/4/47/New_york_times_square-terabass.jpg',
         id: 'afdsfoij3',
         title: 'Meetup in New York',
-        date: '2020-01-18'
+        date: new Date(),
+        location: 'New York',
+        description: 'A very nice meeting'
       },
       {
         imageUrl:
           'https://cdn.pixabay.com/photo/2016/11/01/21/22/paris-1789706_960_720.jpg',
         id: 'bfdsfoij3234',
         title: 'Meetup in Paris',
-        date: '2020-01-19'
+        date: new Date(),
+        location: 'Paris',
+        description: 'A very important meeting'
       }
     ],
     user: {

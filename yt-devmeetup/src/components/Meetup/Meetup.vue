@@ -12,8 +12,8 @@
             gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
             height="400px"
           ></v-img>
-          <v-card-subtitle>Date: {{ meetup.date }}</v-card-subtitle>
-          <v-card-text>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum voluptatibus iusto voluptates cupiditate earum sapiente animi quod commodi exercitationem molestias, officia a distinctio, debitis consequuntur nesciunt maxime, reiciendis aut fugit.</v-card-text>
+          <v-card-subtitle>{{ meetup.date | date }} - {{ meetup.location }}</v-card-subtitle>
+          <v-card-text>{{ meetup.description }}</v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn class="primary" >Register</v-btn>
