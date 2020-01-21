@@ -10,6 +10,12 @@
         <v-col sm="6" offset-sm="3">
           <v-text-field v-model="title" label="Title" id="title" required></v-text-field>
           <v-text-field v-model="location" label="Location" id="location" required></v-text-field>
+          <v-file-input
+            label="Upload Image"
+            accept="image/*"
+            v-model="imageFile"
+            v-on:change="onFilePicked"
+        ></v-file-input>
           <v-text-field v-model="imageUrl" label="Image Url" id="image-url" required></v-text-field>
           <img :src="imageUrl" height="200" />
           <v-textarea
@@ -49,18 +55,14 @@
 export default {
   data () {
     return {
-      title: '',
-      location: '',
-      imageUrl:
-        'https://upload.wikimedia.org/wikipedia/commons/d/da/Frauenkirche_Munich_-_View_from_Peterskirche_Tower2.jpg',
-      description: '',
+      title: 'title',
+      location: 'location',
+      imageUrl: '',
+      description: 'desc',
       date: new Date().toISOString().substr(0, 10),
-      time: new Date().getHours() + ':' + new Date().getMinutes()
-      // time: ''
-      // date: new Date().toJSON(),
-      // time: new Date().toJSON(),
-      // date: new Date().toISOString().substr(0, 10),
-      // time: new Date().getHours() + ':' + new Date().getMinutes()
+      time: new Date().getHours() + ':' + new Date().getMinutes(),
+      imageFile: null, // the inputfield
+      image: null // the binary file
     }
   },
   computed: {
@@ -86,15 +88,36 @@ export default {
       if (!this.formIsValid) {
         return
       }
+      if (!this.image) {
+        return
+      }
       const meetupData = {
         title: this.title,
         location: this.location,
         description: this.description,
-        imageUrl: this.imageUrl,
+        // imageUrl: this.imageUrl, // too big
+        image: this.image, // better to use binary
         date: this.submitableDateTime
       }
       this.$store.dispatch('createMeetup', meetupData)
       this.$router.push('/meetups')
+    },
+    onFilePicked () {
+      console.log('a file was picked:', this.imageFile)
+      if (!this.imageFile) {
+        this.imageUrl = null
+        return
+      }
+      this.imageUrl = null
+
+      // read the file and store it b64 encoded
+      const fileReader = new FileReader()
+      fileReader.addEventListener('load', () => {
+        console.log('loading the file')
+        this.imageUrl = fileReader.result
+      })
+      fileReader.readAsDataURL(this.imageFile)
+      this.image = this.imageFile // maybe skip this
     }
   }
 }

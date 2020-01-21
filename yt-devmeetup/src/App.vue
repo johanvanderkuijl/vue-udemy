@@ -10,6 +10,7 @@
           v-for="item in menuItems"
           :key=item.title
           :to="item.link"
+          @click="onLogout(item.title)"
           >
           <v-list-item-action>
             <v-icon>{{ item.icon }}</v-icon>
@@ -39,6 +40,7 @@
             :key=item.title
             text
             :to="item.link"
+            @click="onLogout(item.title)"
             >
             <v-icon left>{{ item.icon }}</v-icon>
             {{ item.title }}
@@ -66,14 +68,36 @@ export default {
   },
 
   data: () => ({
-    drawer: false,
-    menuItems: [
-      { icon: 'mdi-account-supervisor', title: 'View Meetups', link: '/meetups' },
-      { icon: 'mdi-room', title: 'Organize Meetups', link: '/meetups/new' },
-      { icon: 'mdi-person', title: 'Profile', link: '/profile' },
-      { icon: 'mdi-face', title: 'Sign up', link: '/signup' },
-      { icon: 'mdi-lock-open', title: 'Sign in', link: '/signin' }
-    ]
-  })
+    drawer: false
+  }),
+  methods: {
+    onLogout (payload) {
+      // need to improve this
+      if (payload === 'Logout') {
+        console.log('App.vue onLogout', payload)
+        this.$store.dispatch('logout')
+      }
+    }
+  },
+  computed: {
+    menuItems () {
+      let menuItems = [
+        { icon: 'mdi-face', title: 'Sign up', link: '/signup' },
+        { icon: 'mdi-lock-open', title: 'Sign in', link: '/signin' }
+      ]
+      if (this.userIsAuthenticated) {
+        menuItems = [
+          { icon: 'mdi-account-supervisor', title: 'View Meetups', link: '/meetups' },
+          { icon: 'mdi-plus', title: 'Organize Meetups', link: '/meetups/new' },
+          { icon: 'mdi-face-profile', title: 'Profile', link: '/profile' },
+          { icon: 'mdi-logout', title: 'Logout', link: '#', myHandler: 'onLogout' }
+        ]
+      }
+      return menuItems
+    },
+    userIsAuthenticated () {
+      return this.$store.getters.user !== null && this.$store.getters.user !== undefined
+    }
+  }
 }
 </script>

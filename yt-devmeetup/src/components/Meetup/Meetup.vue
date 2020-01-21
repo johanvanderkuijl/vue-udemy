@@ -5,6 +5,10 @@
         <v-card>
           <v-card-title>
             <h3 class="primary--text">{{ meetup.title }}</h3>
+            <template v-if="userIsCreator">
+              <v-spacer></v-spacer>
+              <app-edit-meetup-details-dialog></app-edit-meetup-details-dialog>
+            </template>
           </v-card-title>
           <v-img
             :src=meetup.imageUrl
@@ -29,11 +33,20 @@ export default {
   props: ['id'],
   computed: {
     meetup () {
-      console.log('meetup.vue computed property')
-      console.log('this.$route.params.id:', this.$route.params.id)
-      console.log('this.id (prop):', this.id)
+      // console.log('meetup.vue computed property')
+      // console.log('this.$route.params.id:', this.$route.params.id)
+      // console.log('this.id (prop):', this.id)
       // return this.$store.getters.loadedMeetup(this.$route.params.id)
       return this.$store.getters.loadedMeetup(this.id)
+    },
+    userIsAuthenticated () {
+      return this.$store.getters.user !== null && this.$store.getters.user !== undefined
+    },
+    userIsCreator () {
+      if (!this.userIsAuthenticated) {
+        return false
+      }
+      return this.$store.getters.user.id === this.meetup.creatorId
     }
   }
 }

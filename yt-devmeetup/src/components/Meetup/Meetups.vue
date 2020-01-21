@@ -24,6 +24,9 @@
                 <div>{{ meetup.date | date }}</div>
                 </div>
               </v-card-title>
+              <v-card-subtitle>
+                <p>Created by {{ meetup.creatorId }}</p>
+              </v-card-subtitle>
               <v-card-actions>
                 <v-btn text :to="'/meetups/' + meetup.id">
                   <v-icon left>mdi-arrow-right</v-icon>
@@ -48,9 +51,11 @@
 export default {
   computed: {
     meetups () {
-      console.log(this.$store.getters.loadedMeetups)
       return this.$store.getters.loadedMeetups
     }
+  },
+  created () {
+    console.log('Meetups.vue created')
   }
 }
 </script>

@@ -1295,6 +1295,7 @@ endpoint: ''/accounts:signUp?key=abcdlongkey'
 ```
 ### protect a route:
 in routes.js:
+add store ```import store from '@/store'```, then
 ```
   {
     path: '/dashboard',
@@ -1698,4 +1699,112 @@ import * as firebase from 'firebase'`
       appId: ''
     })
   }
-  ```
+```
+
+### track login / loading state
+add state loading, authError to vuex so you can show progress
+create component with v-alert, closable, emitting onClose
+include component in signin / signup page
+show component with v-if="error"
+onDismissed dispatch the clear error action
+
+### store data in firebase
+plan
+create collection (meetups)
+```
+      var db = firebase.firestore()
+
+      db.collection('meetups').add({
+        title: meetup.title,
+        location: meetup.location,
+        imageUrl: meetup.imageUrl,
+        description: meetup.description,
+        date: meetup.date
+      })
+        .then(
+          docRef => {
+            console.log('Added meetup with id', docRef.id)
+            meetup.id = docRef.id
+            commit('createMeetup', meetup)
+          })
+        .catch(
+          error => {
+            console.log('Error adding meetup:', error)
+          })
+```
+questions: where to initialize the db
+when to load the meetups => created hook in main.js
+
+now add a loader to the caroussel:
+pick a loader animation:
+```
+<v-progress-circular
+  indeterminate
+  color="primary"
+></v-progress-circular>
+```
+it is tracked by the state.loading
+
+### log in automatically in firebase
+set up auth listener in main.js:
+```
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        // User is signed in.
+        console.log('onAuthStateChanged: found user', user)
+        const LoggedInUser = {
+          id: user.uid,
+          registeredMeetups: []
+        }
+        this.$store.commit('setUser', LoggedInUser)
+      } else {
+        // No user is signed in.
+        console.log('onAuthStateChanged no user found')
+      }
+    })
+```
+
+### upload images
+use <v-file-input>
+store as b64 in a text field for preview
+store binary as image
+upload all to firebase
+get the id back of the meetup
+use the id in the image and associate with the image
+finally get the url of the image
+now update the meetup in firebase with the url
+
+add doc to firebase:
+```
+var db = firebase.firestore()
+db.collection('meetups').add(meetup)
+  .then(docRef => {
+    // get the id from firebase
+    id = docRef.id
+    console.log('Added meetup with id', id)
+    return id // this id is returned and available in the next .then()
+  })
+```
+
+update document in firebase with new field
+```
+  const docRef = db.collection('meetups').doc(id)
+  console.log('with docref', docRef)
+
+  docRef.update({
+    imageUrl: imageUrl
+  }).then(() => {
+    console.log('updated success')
+  })
+```
+
+show edit button if user is owner:
+```
+  <v-card-title>
+    <h3 class="primary--text">{{ meetup.title }}</h3>
+    <template v-if="meetup.creatorId == user.id">
+      <v-spacer></v-spacer>
+      <app-edit-meetup-details-dialog></app-edit-meetup-details-dialog>
+    </template>
+  </v-card-title>
+```
